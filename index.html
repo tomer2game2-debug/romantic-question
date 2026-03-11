@@ -1,55 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Question</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Question</title>
 
-<style>
-body{
-font-family:Arial;
-text-align:center;
-margin-top:150px;
-background:#ffe6f0;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #ffe6f0, #ffd6eb);
+      overflow: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
 
-button{
-padding:15px 30px;
-font-size:20px;
-margin:10px;
-cursor:pointer;
-}
+    .container {
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 2;
+    }
 
-#noBtn{
-position:absolute;
-}
-</style>
+    h1 {
+      margin-top: 60px;
+      font-size: 2rem;
+      color: #d63384;
+    }
 
+    .btn-wrap {
+      margin-top: 40px;
+      position: relative;
+      height: 300px;
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.2s, font-size 0.2s, padding 0.2s;
+    }
+
+    #yesBtn {
+      background: #ff4da6;
+      color: white;
+      position: relative;
+      z-index: 3;
+    }
+
+    #noBtn {
+      background: white;
+      color: #d63384;
+      position: absolute;
+      left: 55%;
+      top: 120px;
+      z-index: 3;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      top: -20px;
+      font-size: 20px;
+      animation: fall linear forwards;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0.2;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="hearts" id="hearts"></div>
 
-<h1>Will you come with me to a cabin weekend? ❤️</h1>
+  <div class="container">
+    <h1>Will you come with me to a cabin weekend? ❤️</h1>
 
-<button onclick="yes()">Yes</button>
-<button id="noBtn" onmouseover="move()">No</button>
+    <div class="btn-wrap" id="playArea">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
 
-<script>
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const playArea = document.getElementById("playArea");
 
-function yes(){
-alert("Yesss! ❤️ I knew it!");
-}
+    let noScale = 1;
 
-function move(){
-let btn=document.getElementById("noBtn");
+    yesBtn.addEventListener("click", () => {
+      window.location.href = "yes.html";
+    });
 
-let x=Math.random()*window.innerWidth;
-let y=Math.random()*window.innerHeight;
+    function moveNoButton() {
+      const areaRect = playArea.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
 
-btn.style.left=x+"px";
-btn.style.top=y+"px";
-}
+      const maxX = areaRect.width - btnRect.width;
+      const maxY = areaRect.height - btnRect.height;
 
-</script>
+      const randomX = Math.max(0, Math.random() * maxX);
+      const randomY = Math.max(0, Math.random() * maxY);
 
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+
+      noScale -= 0.08;
+      if (noScale < 0.45) noScale = 0.45;
+      noBtn.style.transform = `scale(${noScale})`;
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (3 + Math.random() * 4) + "s";
+      heart.style.fontSize = (16 + Math.random() * 20) + "px";
+      document.getElementById("hearts").appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
+    }
+
+    setInterval(createHeart, 500);
+  </script>
 </body>
 </html>
