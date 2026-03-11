@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Question</title>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+margin-top:150px;
+background:#ffe6f0;
+}
+
+button{
+padding:15px 30px;
+font-size:20px;
+margin:10px;
+cursor:pointer;
+}
+
+#noBtn{
+position:absolute;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Will you come with me to a cabin weekend? ❤️</h1>
+
+<button onclick="yes()">Yes</button>
+<button id="noBtn" onmouseover="move()">No</button>
+
+<script>
+
+function yes(){
+alert("Yesss! ❤️ I knew it!");
+}
+
+function move(){
+let btn=document.getElementById("noBtn");
+
+let x=Math.random()*window.innerWidth;
+let y=Math.random()*window.innerHeight;
+
+btn.style.left=x+"px";
+btn.style.top=y+"px";
+}
+
+</script>
+
+</body>
+</html>
